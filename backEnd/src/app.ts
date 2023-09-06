@@ -10,10 +10,10 @@ app.use(express.urlencoded({ extended: true }));
 
 routes(app);
 
-/* AppDataSource.initialize()
+AppDataSource.initialize()
   .then(() => {
     console.log("Database started without any problems");
   })
-  .catch((error) => console.log(error)); */
+  .catch((error) => console.log(error));
 
 export default app;

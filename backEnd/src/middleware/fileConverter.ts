@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import errorResponse from "../common/errorResponse";
+import errorResponse from "../utils/errorResponse";
 import { Readable } from "stream";
 import readline from "readline";
 import { CSVType } from "../types/csvType";
@@ -21,8 +21,6 @@ export default async function fileConverter(
       req.body.error = "O arquivo precisa ser do tipo CSV.";
       return next();
     }
-
-    console.log("Passou");
 
     const readable = new Readable();
     readable.push(file.buffer);
