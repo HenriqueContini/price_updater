@@ -1,14 +1,17 @@
 import { Request, Response } from "express";
+import errorResponse from "../common/errorResponse";
 
 export class FileController {
   static async checkFile(req: Request, res: Response) {
     try {
+      if (req.body.error) return errorResponse(res, 400, req.body.error);
+
       console.log(req.body.csvData);
 
       res.status(200).send("FOI");
     } catch (error) {
       console.log(error);
-      res.status(500).send("Erro");
+      errorResponse(res, 500, "Ocorreu um erro desconhecido");
     }
   }
 }

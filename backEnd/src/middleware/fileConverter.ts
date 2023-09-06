@@ -12,9 +12,17 @@ export default async function fileConverter(
   try {
     const file = req.file;
 
-    if (!file) return errorResponse(res, 400, "É necessário enviar um arquivo");
-    if (file.mimetype !== "text/csv")
-      return errorResponse(res, 400, "O arquivo precisa ser do tipo CSV");
+    if (!file) {
+      req.body.error = "É necessário enviar um arquivo.";
+      return next();
+    }
+
+    if (file.mimetype !== "text/csv") {
+      req.body.error = "O arquivo precisa ser do tipo CSV.";
+      return next();
+    }
+
+    console.log("Passou");
 
     const readable = new Readable();
     readable.push(file.buffer);
@@ -27,18 +35,24 @@ export default async function fileConverter(
     const csvData: CSVType[] = [];
 
     let headerLine = true;
+    const header = "product_code,new_price";
 
     fileReader.on("line", (rawLine: string) => {
       if (headerLine) {
-        headerLine = false;
-        return;
+        if (rawLine === header) {
+          headerLine = false;
+          return;
+        }
+
+        return (req.body.error =
+          "O cabeçalho do arquivo deve seguir o padrão: product_code,new_price");
       }
 
       const line = rawLine.split(",");
 
       csvData.push({
         product_code: line[0],
-        new_price: Number.parseInt(line[1]),
+        new_price: Number.parseFloat(line[1]),
       });
     });
 
