@@ -11,7 +11,10 @@ export default async function fileConverter(
 ) {
   try {
     const file = req.file;
+
     if (!file) return errorResponse(res, 400, "É necessário enviar um arquivo");
+    if (file.mimetype !== "text/csv")
+      return errorResponse(res, 400, "O arquivo precisa ser do tipo CSV");
 
     const readable = new Readable();
     readable.push(file.buffer);
