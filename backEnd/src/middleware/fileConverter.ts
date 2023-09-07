@@ -17,7 +17,10 @@ export default async function fileConverter(
       return next();
     }
 
-    if (file.mimetype !== "text/csv") {
+    const fileTypes = ["text/csv", "application/vnd.ms-excel"];
+
+    if (!fileTypes.includes(file.mimetype)) {
+      console.log(file.mimetype);
       req.body.error = "O arquivo precisa ser do tipo CSV.";
       return next();
     }
