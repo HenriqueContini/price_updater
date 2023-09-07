@@ -58,8 +58,6 @@ function checkNewPricePercentage(products: ProductType[]) {
       const salesPrice: number = Number(item.sales_price);
       const tenPercent: number = salesPrice * 0.1;
 
-      console.log(salesPrice + tenPercent);
-
       if (item.new_price > salesPrice + tenPercent) {
         problems.push(
           `O novo valor não pode ser maior que R$ ${(
