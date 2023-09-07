@@ -31,7 +31,6 @@ function checkNewPackPrice(productData: ProductType[], rawPacksData: Pack[]) {
     // Check if is a pack
     if (packsIDs.includes(product.code)) {
       const problems: string[] = product.problems || [];
-      console.log(`O produto: ${product.code} é um pack`);
 
       // Get products from pack
       const packProducts = rawPacksData.filter(
@@ -51,13 +50,10 @@ function checkNewPackPrice(productData: ProductType[], rawPacksData: Pack[]) {
 
       // Get new price
       productsPrice.forEach((item) => {
-        console.log(item);
         if (productsIDs.includes(item.productID)) {
           const newProduct = productData.find((p) => p.code === item.productID);
-          console.log(Number(newProduct?.new_price) * Number(item.qty));
           newPrice += Number(newProduct?.new_price) * Number(item.qty);
         } else {
-          console.log(Number(item.qty) * item.price);
           newPrice += Number(item.qty) * item.price;
         }
       });
@@ -67,8 +63,6 @@ function checkNewPackPrice(productData: ProductType[], rawPacksData: Pack[]) {
           "O novo preço do pack não corresponde ao preço dos componentes"
         );
       }
-
-      console.log(newPrice);
 
       product.problems = problems;
     }

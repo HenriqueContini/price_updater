@@ -16,12 +16,13 @@ import {
   checkIfPackIsOnFile,
   checkNewPackPrice,
 } from "../utils/validatePacksData";
+import { ApiResponseType } from "../types/apiResponse";
 
 const productRepository = AppDataSource.getRepository(Product);
 const packRepository = AppDataSource.getRepository(Pack);
 
 export class FileService {
-  static async checkData(data: CSVType[]) {
+  static async checkData(data: CSVType[]): Promise<ApiResponseType> {
     try {
       checkFields(data);
 
@@ -76,9 +77,16 @@ export class FileService {
 
       checkNewPackPrice(productsData, rawPacksData);
 
-      return productsData;
+      return {
+        error: false,
+        csvProblems: data.filter(
+          (item) => item.problems && item.problems.length > 0
+        ),
+        products: productsData,
+      };
     } catch (error) {
       console.log(error);
+      throw new Error("Ocorreu um problema interno");
     }
   }
 }
