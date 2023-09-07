@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
   password: "root",
   database: "price_updater",
   synchronize: false,
-  logging: true,
+  logging: false,
   entities: [Product, Pack],
   migrations: [
     CreateTables1693951908092,

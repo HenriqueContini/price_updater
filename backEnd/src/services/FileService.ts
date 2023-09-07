@@ -11,7 +11,11 @@ import {
 import { ProductType } from "../types/productType";
 import getItensWithoutProblems from "../utils/getItensWithoutProblems";
 import { Pack } from "../entity/Pack";
-import { checkIfPackIsOnFile } from "../utils/validatePacksData";
+import { PackType } from "../types/packType";
+import {
+  checkIfPackIsOnFile,
+  checkNewPackPrice,
+} from "../utils/validatePacksData";
 
 const productRepository = AppDataSource.getRepository(Product);
 const packRepository = AppDataSource.getRepository(Pack);
@@ -27,13 +31,13 @@ export class FileService {
         code: In(csvDataWithoutFieldsProblems.map((item) => item.product_code)),
       });
 
-      const rawPacksData = await packRepository.find({
+      const rawPacksInProductsData = await packRepository.find({
         where: {
-          product_id: In(rawProductsData.map((item) => item.code)),
+          product: In(rawProductsData.map((item) => item.code)),
         },
         relations: {
-          pack_id: true,
-          product_id: true,
+          pack: true,
+          product: true,
         },
       });
 
@@ -45,9 +49,9 @@ export class FileService {
 
       productsData.forEach((product) => {
         const packs: string[] = [];
-        rawPacksData.map((pack) => {
-          if (product.code === pack.product_id.code) {
-            packs.push(pack.pack_id.code);
+        rawPacksInProductsData.map((pack) => {
+          if (product.code === pack.product.code) {
+            packs.push(pack.pack.code);
           }
         });
 
@@ -59,6 +63,20 @@ export class FileService {
       checkNewPricePercentage(productsData);
 
       checkIfPackIsOnFile(productsData);
+
+      const rawPacksData = await packRepository.find({
+        where: {
+          pack: In(productsData.map((item) => item.code).flat(Infinity)),
+        },
+        relations: {
+          pack: true,
+          product: true,
+        },
+      });
+
+      checkNewPackPrice(productsData, rawPacksData);
+
+      return productsData;
     } catch (error) {
       console.log(error);
     }

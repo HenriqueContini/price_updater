@@ -7,9 +7,9 @@ export class FileController {
     try {
       if (req.body.error) return errorResponse(res, 400, req.body.error);
 
-      await FileService.checkData(req.body.csvData);
+      const data = await FileService.checkData(req.body.csvData);
 
-      res.status(200).send("FOI");
+      res.status(200).json(data);
     } catch (error) {
       console.log(error);
       errorResponse(res, 500, "Ocorreu um erro desconhecido");

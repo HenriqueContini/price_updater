@@ -16,13 +16,13 @@ export class Pack {
     createForeignKeyConstraints: false,
   })
   @JoinColumn({ name: "pack_id" })
-  pack_id: Product;
+  pack: Product;
 
   @ManyToOne(() => Product, (product) => product.code, {
     createForeignKeyConstraints: false,
   })
   @JoinColumn({ name: "product_id" })
-  product_id: Product;
+  product: Product;
 
   @Column({ type: "bigint" })
   qty: string;
