@@ -11,7 +11,6 @@ import {
 import { ProductType } from "../types/productType";
 import getItensWithoutProblems from "../utils/getItensWithoutProblems";
 import { Pack } from "../entity/Pack";
-import { PackType } from "../types/packType";
 import {
   checkIfPackIsOnFile,
   checkNewPackPrice,
@@ -19,6 +18,7 @@ import {
 import { ApiResponseType } from "../types/apiResponse";
 
 const productRepository = AppDataSource.getRepository(Product);
+const productManager = AppDataSource.manager;
 const packRepository = AppDataSource.getRepository(Pack);
 
 export class FileService {
@@ -86,7 +86,38 @@ export class FileService {
       };
     } catch (error) {
       console.log(error);
-      throw new Error("Ocorreu um problema interno");
+      throw new Error("Ocorreu um problema ao tentar validar os produtos");
+    }
+  }
+
+  static async updatePrice(productsData: ProductType[]) {
+    const queryRunner = AppDataSource.createQueryRunner();
+
+    await queryRunner.startTransaction();
+    let sucess: boolean = false;
+
+    try {
+      productsData.map(async (item) => {
+        const product = await productManager.findOneBy(Product, {
+          code: item.code,
+        });
+
+        if (product?.sales_price && item.new_price) {
+          product.sales_price = item.new_price;
+        }
+
+        await productManager.save(product);
+      });
+
+      await queryRunner.commitTransaction();
+      sucess = true;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      sucess = false;
+      console.log(error);
+    } finally {
+      await queryRunner.release();
+      return sucess;
     }
   }
 }

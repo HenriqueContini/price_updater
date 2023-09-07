@@ -16,4 +16,11 @@ fileRoute.post(
   FileController.checkFile
 );
 
+fileRoute.post(
+  "/updatePrice",
+  upload.single("csvFile"),
+  fileConverter,
+  FileController.updatePrice
+);
+
 export default fileRoute;
