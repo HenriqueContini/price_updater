@@ -31,24 +31,43 @@ Caso os produtos não tenham nenhum problema, será possível fazer uma requisi�
 
 ## 🏃‍♂️ Rodar projeto
 
-1. Primeiro, será necessário baixar o projeto. Para isso, basta rodar o comando abaixo dentro da pasta que desejar:
-
+### 1. Clonando o projeto
+Primeiro, será necessário baixar o projeto. Para isso, basta rodar o comando abaixo dentro da pasta que desejar:
 ```
-https://github.com/HenriqueContini/price_updater.git
+git clone https://github.com/HenriqueContini/price_updater.git
 ```
+Depois, acesse a pasta criada: `cd price_updater`.
 
-2. Dentro da pasta, será necessário baixar as dependências do projeto por meio do comando:
-
+### 2. Back-end
+Dentro da pasta do projeto, será necessário acessar a pasta back-end `cd backEnd`. Dentro dela, será necessário rodar o comando:
 ```
 npm install
 ```
+Depois de baixar as dependências, será necessário configurar o banco de dados, para isso, com uma IDE (vscode), basta acessar o arquivo `src/database/data-source.ts` e modificar as configurações com base no seu banco de dados local:
 
-3. Depois, basta rodar o projeto com:
+![image](https://github.com/HenriqueContini/price_updater/assets/81761545/4a731ab6-aa3e-44ee-9298-b026b5912586)
 
+Para criar as tabelas com os dados, por meio da migration do TypeORM, basta rodar:
 ```
-npm run build
-npm run preview
+npm run typeorm migration:run -- -d src/database/data-source.ts
 ```
+Por fim, basta rodar o back-end por meio do comando:
+```
+npm run dev
+```
+Obs: Certifique-se de que a porta 3000 não esteja sendo usada.
+
+### 3. Front-end
+Para rodar o front-end, será necessário acessar a pasta raiz do projeto `price_updater`, e, depois, acessar a pasta front-end: `cd front-end`
+Dentro dela, será necessário baixar as dependências:
+```
+npm install
+```
+Por fim, basta rodar o front-end com o comando:
+```
+npm run dev
+```
+Que irá abrir no link: `http://localhost:5173/`
 
 ## 🖼️ Spoiler
 ![image](https://github.com/HenriqueContini/price_updater/assets/81761545/d6f49a8f-1eac-4906-85af-f89b4e8cfe0b)
