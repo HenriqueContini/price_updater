@@ -4,7 +4,7 @@ import ProductsTable from "../../components/ProductsTable";
 import { checkDataAPI } from "../../services/checkData";
 import { ApiResponseType } from "../../types/apiResponse";
 import { ProductType } from "../../types/productType";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [file, setFile] = useState<File>();
@@ -16,14 +16,31 @@ export default function Home() {
       const data: ApiResponseType = await checkDataAPI(file);
 
       if (data.products) setProducts(data.products);
-      /* if (data.csvProblems) setCSV(data.csvProblems); */
+
+      if (data.csvProblems) {
+        const newArr: ProductType[] = data.csvProblems.map((item) => {
+          return {
+            code: item.product_code,
+            new_price: item.new_price,
+            problems: item.problems,
+          };
+        });
+
+        setProducts((prev) => [...prev, ...newArr]);
+      }
     }
   };
 
+  useEffect(() => {
+    setProducts([]);
+  }, [file]);
+
   return (
-    <Container sx={{ display: "flex", flexDirection: "column", gap: "40px" }}>
+    <Container sx={{ display: "flex", flexDirection: "column", gap: "100px" }}>
       <FileForm file={file} setFile={setFile} checkData={checkData} />
-      <ProductsTable products={products} />
+      {products && products.length > 0 ? (
+        <ProductsTable products={products} />
+      ) : null}
     </Container>
   );
 }

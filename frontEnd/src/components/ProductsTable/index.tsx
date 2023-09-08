@@ -64,11 +64,14 @@ export default function ProductsTable({ products }: ProductsTableProps) {
               </TableCell>
               <TableCell align="right">{product.code}</TableCell>
               <TableCell align="right">
-                R$ {Number(product.sales_price).toFixed(2)}
+                {product.sales_price
+                  ? "R$ " + Number(product.sales_price).toFixed(2)
+                  : ""}
               </TableCell>
               <TableCell align="right">
-                R$
-                {product.new_price ? Number(product.new_price).toFixed(2) : ""}
+                {product.new_price
+                  ? "R$ " + Number(product.new_price).toFixed(2)
+                  : ""}
               </TableCell>
               <TableCell align="right">
                 {product.problems && product.problems.length > 0 ? (
