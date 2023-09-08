@@ -46,7 +46,7 @@ function checkNewPackPrice(productData: ProductType[], rawPacksData: Pack[]) {
         };
       });
 
-      let newPrice = 0;
+      let newPrice: number = 0;
 
       // Get new price
       productsPrice.forEach((item) => {
@@ -58,7 +58,7 @@ function checkNewPackPrice(productData: ProductType[], rawPacksData: Pack[]) {
         }
       });
 
-      if (newPrice !== Number(product.new_price)) {
+      if (Number(newPrice.toFixed(2)) !== Number(product.new_price)) {
         problems.push(
           "O novo preço do pack não corresponde ao preço dos componentes"
         );
