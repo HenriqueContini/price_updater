@@ -1,9 +1,14 @@
-import * as S from "./styles";
+import { Container, Typography } from "@mui/material";
 
 export default function Header() {
   return (
-    <S.HeaderContainer>
-      <S.Title>Price Updater</S.Title>
-    </S.HeaderContainer>
+    <Container
+      maxWidth={false}
+      sx={{ backgroundColor: "primary.dark", padding: "24px" }}
+    >
+      <Typography component="h1" variant="h3" align="center">
+        Price Updater
+      </Typography>
+    </Container>
   );
 }
